@@ -20,16 +20,18 @@ export const findFlights = async (payload: Payload): Promise<Array<string>> => {
     }
     const apiRequest = await fetch(apiUrl.href)
     const result = await apiRequest.json() as FlightsResponse
-    const flightNumbers = result.data.map(record => record?.flight?.number)
- 
+    const flightNumbers = result.data
+                            .map(record => record?.flight?.number)
+                            .filter(n => n)
+
     // specific filter with flight number
     if ('starts_with' in payload) {
-      return flightNumbers.filter(n => n[0].toString() === payload['starts_with'])
+      return flightNumbers.filter(n => n.charAt(0) === payload['starts_with'])
     } else {
       return flightNumbers
     }
   } catch (e) {
-    throw new Error('Whoops! API call has been failed!')
+    throw new Error(`Whoops! API call has been failed!`)
   }
 }
 
@@ -42,7 +44,7 @@ export const findAirports = async (): Promise<Array<Airport>> => {
 
     return result.data
   } catch (e) {
-    throw new Error('Whoops! API call has been failed!')
+    throw new Error(`Whoops! API call has been failed!`)
   }
 }
 
@@ -55,6 +57,6 @@ export const findCities = async (): Promise<Array<City>> => {
 
     return result.data
   } catch (e) {
-    throw new Error('Whoops! API call has been failed!')
+    throw new Error(`Whoops! API call has been failed!`)
   }
 }

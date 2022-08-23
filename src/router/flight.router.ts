@@ -7,13 +7,9 @@ export const flightsRouter = express.Router()
 // GET flights
 flightsRouter.get("/", async (req: Request, res: Response) => {
   try {
-    const query = req.query
-    const payload = {
+    const flightNumbers: string[] = await FlightsService.findFlights({
+      ...req.query,
       access_key: process.env.API_KEY,
-    }
-    const flightNumbers: Array<string> = await FlightsService.findFlights({
-      ...query,
-      ...payload,
     })
     res.status(200).send(flightNumbers)
   } catch (e) {
@@ -28,7 +24,10 @@ flightsRouter.get("/", async (req: Request, res: Response) => {
 // GET airports
 flightsRouter.get("/airports", async (req: Request, res: Response) => {
   try {
-    const airports: Array<Airport> = await FlightsService.findAirports()
+    const airports: Airport[] = await FlightsService.findAirports({
+      ...req.query,
+      access_key: process.env.API_KEY,
+    })
     res.status(200).send(airports)
   } catch (e) {
     if (e instanceof Error) {
@@ -42,7 +41,10 @@ flightsRouter.get("/airports", async (req: Request, res: Response) => {
 // GET cities
 flightsRouter.get("/cities", async (req: Request, res: Response) => {
   try {
-    const cities: Array<City> = await FlightsService.findCities()
+    const cities: City[] = await FlightsService.findCities({
+      ...req.query,
+      access_key: process.env.API_KEY,
+    })
     res.status(200).send(cities)
   } catch (e) {
     if (e instanceof Error) {

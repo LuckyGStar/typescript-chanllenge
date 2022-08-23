@@ -8,49 +8,45 @@ import {
 } from "../interfaces/flight.interface"
 import fetch from 'node-fetch';
 
+const apiRequest = async <T>(payload: Payload, endpoint: string) => {
+  const apiUrl = new URL(`${process.env.API_URL}/${endpoint}`)
+  for (const [key, value] of Object.entries(payload)) {
+    apiUrl.searchParams.append(key, value)
+  }
+  const request = await fetch(apiUrl)
+  const result = await request.json() as T
+
+  return result
+}
+
 export const findFlights = async (payload: Payload): Promise<Array<string>> => {
   try {
-    const apiUrl = new URL(`${process.env.API_URL}/flights`)
-    for (const [key, value] of Object.entries(payload)) {
-      apiUrl.searchParams.append(key, value)
-    }
-    const apiRequest = await fetch(apiUrl.href)
-    const result = await apiRequest.json() as FlightsResponse
+    const result = await apiRequest<FlightsResponse>(payload, 'flights')
+
     const flightNumbers = result.data
                             .map(record => record?.flight?.number)
                             .filter(n => n)
 
-    // specific filter with flight number
-    if ('starts_with' in payload) {
-      return flightNumbers.filter(n => n.charAt(0) === payload['starts_with'])
-    } else {
-      return flightNumbers
-    }
+    return 'starts_with' in payload
+      ? flightNumbers.filter(n => n.charAt(0) === payload['starts_with'])
+      : flightNumbers
   } catch (e) {
     throw new Error(`Whoops! API call has been failed!`)
   }
 }
 
-export const findAirports = async (): Promise<Array<Airport>> => {
+export const findAirports = async (payload: Payload): Promise<Array<Airport>> => {
   try {
-    const apiUrl = process.env.API_URL
-    const apiKey = process.env.API_KEY
-    const apiRequest = await fetch(`${apiUrl}/airports?access_key=${apiKey}`)
-    const result = await apiRequest.json() as AirportsResponse
-
+    const result = await apiRequest<AirportsResponse>(payload, 'airports')
     return result.data
   } catch (e) {
     throw new Error(`Whoops! API call has been failed!`)
   }
 }
 
-export const findCities = async (): Promise<Array<City>> => {
+export const findCities = async (payload: Payload): Promise<Array<City>> => {
   try {
-    const apiUrl = process.env.API_URL
-    const apiKey = process.env.API_KEY
-    const apiRequest = await fetch(`${apiUrl}/cities?access_key=${apiKey}`)
-    const result = await apiRequest.json() as CitiesResponse
-
+    const result = await apiRequest<CitiesResponse>(payload, 'cities')
     return result.data
   } catch (e) {
     throw new Error(`Whoops! API call has been failed!`)

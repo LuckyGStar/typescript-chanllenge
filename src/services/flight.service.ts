@@ -5,8 +5,8 @@ import {
   FlightsResponse,
   AirportsResponse,
   CitiesResponse,
-} from "../interfaces/flight.interface"
-import fetch from 'node-fetch';
+} from '../interfaces/flight.interface'
+import fetch from 'node-fetch'
 
 const apiRequest = async <T>(payload: Payload, endpoint: string) => {
   const apiUrl = new URL(`${process.env.API_URL}/${endpoint}`)
@@ -14,7 +14,7 @@ const apiRequest = async <T>(payload: Payload, endpoint: string) => {
     apiUrl.searchParams.append(key, value)
   }
   const request = await fetch(apiUrl)
-  const result = await request.json() as T
+  const result = (await request.json()) as T
 
   return result
 }
@@ -24,18 +24,20 @@ export const findFlights = async (payload: Payload): Promise<Array<string>> => {
     const result = await apiRequest<FlightsResponse>(payload, 'flights')
 
     const flightNumbers = result.data
-                            .map(record => record?.flight?.number)
-                            .filter(n => n)
+      .map((record) => record?.flight?.number)
+      .filter((n) => n)
 
     return 'starts_with' in payload
-      ? flightNumbers.filter(n => n.charAt(0) === payload['starts_with'])
+      ? flightNumbers.filter((n) => n.charAt(0) === payload['starts_with'])
       : flightNumbers
   } catch (e) {
     throw new Error(`Whoops! API call has been failed!`)
   }
 }
 
-export const findAirports = async (payload: Payload): Promise<Array<Airport>> => {
+export const findAirports = async (
+  payload: Payload
+): Promise<Array<Airport>> => {
   try {
     const result = await apiRequest<AirportsResponse>(payload, 'airports')
     return result.data

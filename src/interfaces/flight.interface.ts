@@ -120,7 +120,13 @@ export interface Payload {
   access_key: string | undefined
   limit?: number
   offset?: number
-  flight_status?: 'scheduled' | 'active' | 'landed' | 'cancelled' | 'incident' | 'diverted'
+  flight_status?:
+    | 'scheduled'
+    | 'active'
+    | 'landed'
+    | 'cancelled'
+    | 'incident'
+    | 'diverted'
   flight_date?: string
   flight_number?: number
   dep_iata?: string

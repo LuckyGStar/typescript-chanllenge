@@ -1,11 +1,11 @@
-import express, { Request, Response } from "express"
-import * as FlightsService from "../services/flight.service"
-import { Airport, City } from "../interfaces/flight.interface"
+import express, { Request, Response } from 'express'
+import * as FlightsService from '../services/flight.service'
+import { Airport, City } from '../interfaces/flight.interface'
 
 export const flightsRouter = express.Router()
 
 // GET flights
-flightsRouter.get("/", async (req: Request, res: Response) => {
+flightsRouter.get('/', async (req: Request, res: Response) => {
   try {
     const flightNumbers: string[] = await FlightsService.findFlights({
       ...req.query,
@@ -22,7 +22,7 @@ flightsRouter.get("/", async (req: Request, res: Response) => {
 })
 
 // GET airports
-flightsRouter.get("/airports", async (req: Request, res: Response) => {
+flightsRouter.get('/airports', async (req: Request, res: Response) => {
   try {
     const airports: Airport[] = await FlightsService.findAirports({
       ...req.query,
@@ -39,7 +39,7 @@ flightsRouter.get("/airports", async (req: Request, res: Response) => {
 })
 
 // GET cities
-flightsRouter.get("/cities", async (req: Request, res: Response) => {
+flightsRouter.get('/cities', async (req: Request, res: Response) => {
   try {
     const cities: City[] = await FlightsService.findCities({
       ...req.query,

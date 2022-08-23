@@ -1,20 +1,8 @@
-/**
- * Required External Modules and Interfaces
- */
-
 import express, { Request, Response } from "express"
 import * as FlightsService from "../services/flight.service"
 import { Airport, City } from "../interfaces/flight.interface"
 
-/**
- * Router Definition
- */
-
 export const flightsRouter = express.Router()
-
-/**
- * Controller Definitions
- */
 
 // GET flights
 flightsRouter.get("/", async (req: Request, res: Response) => {
@@ -51,7 +39,7 @@ flightsRouter.get("/airports", async (req: Request, res: Response) => {
   }
 })
 
-// GET airports
+// GET cities
 flightsRouter.get("/cities", async (req: Request, res: Response) => {
   try {
     const cities: Array<City> = await FlightsService.findCities()

@@ -8,10 +8,6 @@ import {
 } from "../interfaces/flight.interface"
 import fetch from 'node-fetch';
 
-/**
- * Service Methods
- */
- 
 export const findFlights = async (payload: Payload): Promise<Array<string>> => {
   try {
     const apiUrl = new URL(`${process.env.API_URL}/flights`)
